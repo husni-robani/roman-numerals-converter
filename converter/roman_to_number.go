@@ -2,38 +2,34 @@ package converter
 
 import (
 	"log"
-	"strings"
 )
 
 func RomanToNumber(roman_number string) int {
-	if roman_number == ""{
+	if roman_number == "" {
 		log.Fatal("roman number is empty")
 	}
+	
 
-	splitted_roman := strings.Split(roman_number, "")
 	result := 0
-	for i:= 0; i < len(splitted_roman); i++ {
-		if i == len(splitted_roman) - 1 {
-			result += get_roman_value(splitted_roman[i])
-		}else {
-			if get_roman_value(splitted_roman[i + 1]) > get_roman_value(splitted_roman[i]){
-				// do substraction
-				result += get_roman_value(splitted_roman[i + 1]) - get_roman_value(splitted_roman[i])
-				i++
-			}else {
-				if get_roman_value(splitted_roman[i + 2]) > get_roman_value(splitted_roman[i + 1]){
-					// substract: splittedRoman[i + 2] - splittedRoman[i + 1] = temp
-					temp := get_roman_value(splitted_roman[i + 2]) - get_roman_value(splitted_roman[i + 1])
-					// addtion: splittedRoman[i] + temp
-					result += get_roman_value(splitted_roman[i]) + temp
-					i += 2
-				}else{
-					result += get_roman_value(splitted_roman[i]) + get_roman_value(splitted_roman[i + 1])
-					i++
-				}
-			}
+	length := len(roman_number)
+
+	for i := 0; i < length; i++ {
+		// Get the current and next character values
+		currentValue := get_roman_value(string(roman_number[i]))
+		nextValue := 0
+
+		if i < length-1 {
+			nextValue = get_roman_value(string(roman_number[i+1]))
+		}
+
+		// If the current value is less than the next value, we have a subtraction case
+		if currentValue < nextValue {
+			result -= currentValue
+		} else {
+			result += currentValue
 		}
 	}
+
 	return result
 }
 
