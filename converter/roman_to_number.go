@@ -1,12 +1,13 @@
 package converter
 
 import (
-	"log"
+	"errors"
+	"fmt"
 )
 
-func RomanToNumber(roman_number string) int {
+func RomanToNumber(roman_number string) (int, error) {
 	if roman_number == "" {
-		log.Fatal("roman number is empty")
+		return 0, errors.New("roman number is empty")
 	}
 	
 
@@ -15,11 +16,17 @@ func RomanToNumber(roman_number string) int {
 
 	for i := 0; i < length; i++ {
 		// Get the current and next character values
-		currentValue := get_roman_value(string(roman_number[i]))
+		currentValue, err := get_roman_value(string(roman_number[i]))
+		if err != nil{
+			return 0, err
+		}
 		nextValue := 0
 
 		if i < length-1 {
-			nextValue = get_roman_value(string(roman_number[i+1]))
+			nextValue, err = get_roman_value(string(roman_number[i+1]))
+			if err != nil{
+				return 0, err
+			}
 		}
 
 		// If the current value is less than the next value, we have a subtraction case
@@ -30,10 +37,10 @@ func RomanToNumber(roman_number string) int {
 		}
 	}
 
-	return result
+	return result, nil
 }
 
-func get_roman_value(roman string) int {
+func get_roman_value(roman string) (int, error) {
 	roman_list := map[string]int{
 		"I": 1,
 		"V": 5,
@@ -46,8 +53,8 @@ func get_roman_value(roman string) int {
 	value, exist := roman_list[roman]
 
 	if !exist {
-		log.Fatalf("%v is not a roman numerals", roman)
+		return 0, fmt.Errorf("%v is not a roman numerals", roman)
 	}
 
-	return value
+	return value, nil
 }
