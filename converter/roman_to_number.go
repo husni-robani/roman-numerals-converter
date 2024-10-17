@@ -3,9 +3,11 @@ package converter
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 func RomanToNumber(roman_number string) (int, error) {
+	roman_number = strings.ToUpper(roman_number)
 	if roman_number == "" {
 		return 0, errors.New("roman number is empty")
 	}
